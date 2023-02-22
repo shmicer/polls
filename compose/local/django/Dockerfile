@@ -17,13 +17,6 @@ RUN pip install --upgrade pip
 COPY ./requirements/local/requirements.txt .
 RUN pip install -r requirements.txt
 
-# copy entrypoint.sh
-COPY ./compose/local/django/entrypoint.sh .
-RUN sed -i 's/\r$//g' ./compose/local/django/entrypoint.sh
-RUN chmod +x ./compose/local/django/entrypoint.sh
-
-# copy project
-COPY . .
-
-# run entrypoint.sh
-ENTRYPOINT ["./compose/local/django/entrypoint.sh"]
+# Run the service
+CMD python manage.py migrate \
+    && python manage.py runserver 0.0.0.0:8000

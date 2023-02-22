@@ -1,27 +1,32 @@
 version: '3.9'
 
 services:
+
   web:
     build:
       context: .
       dockerfile: compose/local/django/Dockerfile
-    command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - ./app/:/usr/src/app/
     ports:
-      - 8000:8000
+      - "50800:8000"
+      - "4666:4444"
     env_file:
-      - ./.envs/.env
+      - ./.envs/.local/.django
+      - ./.envs/.local/.postgres
     depends_on:
       - db
+    stdin_open: true
+    tty: true
+
   db:
     image: postgres:13.0-alpine
     ports:
-      - 5432:5432
+      - "30333:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
-      - ./.envs/.postgres
+      - .envs/.local/.postgres
 
 volumes:
-  postgres_data:
+  postgres_data: {}

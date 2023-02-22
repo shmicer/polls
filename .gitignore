@@ -168,3 +168,6 @@ poetry.toml
 
 # ruff
 .ruff_cache/
+
+.idea/*
+.envs/

@@ -1,0 +1,5 @@
+# Django
+# ------------------------------------------------------------------------------
+DJANGO_DEBUG=TRUE
+SECRET_KEY="zjF3df38mwm0Fgw_lDs&ig&!^m55cai*%12341qlt*w#x-s50!^io0sFx)j"
+DJANGO_SETTINGS_MODULE="settings.local"
