@@ -1,15 +1,17 @@
-version: '3.8'
+version: '3.9'
 
 services:
   web:
-    build: ./app
+    build:
+      context: .
+      dockerfile: compose/local/django/Dockerfile
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - ./app/:/usr/src/app/
     ports:
       - 8000:8000
     env_file:
-      - ./.env.dev
+      - ./.envs/.env
     depends_on:
       - db
   db:
@@ -18,10 +20,8 @@ services:
       - 5432:5432
     volumes:
       - postgres_data:/var/lib/postgresql/data/
-    environment:
-      - POSTGRES_USER=hello_django
-      - POSTGRES_PASSWORD=hello_django
-      - POSTGRES_DB=hello_django_dev
+    env_file:
+      - ./.envs/.postgres
 
 volumes:
   postgres_data:
