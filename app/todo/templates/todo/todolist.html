@@ -1,0 +1,53 @@
+{% extends 'todo/base.html' %}
+{% block content %}
+
+
+<style>
+    .home-container{
+        display: grid;
+        grid-template-columns: 1fr 3fr 1fr;
+    }
+</style>
+
+<h1>My To Do List</h1>
+
+<div class="home-container">
+    <div>
+    {% include 'todo/categories_component.html' %}
+    </div>
+    <div>
+        <div>
+{#            <form action="addItem/" method = "POST">#}
+{#                {% csrf_token %}#}
+{#                <input type="text" name="body">#}
+{#                <input type="submit" value="Add Todo Item">#}
+{#            </form>#}
+            <a href="{% url 'addItem' %}">Create ToDo</a>
+        </div>
+        <hr>
+        <h5>
+            {{ todo_count }} items to do
+        </h5>
+        <ul>
+            {% for item in all_items %}
+                <li>
+                    <p>{{ item.title }}</p>
+                    {{item.content}}
+
+                    <p>Due date: {{ item.due_date }}</p>
+                    <a href="{% url 'deleteItem' item.id %}">Delete</a>
+                    <small>{{ item.category }}</small>
+                    <hr>
+                </li>
+            {% endfor %}
+        </ul>
+{#        {% include 'base/feed_component.html' %}#}
+    </div>
+    <div>
+        <h1>Right</h1>
+{#    {% include 'base/activity_component.html' %}#}
+    </div>
+</div>
+
+{% endblock content %}
+
