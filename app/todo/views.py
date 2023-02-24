@@ -6,29 +6,32 @@ from .forms import TodoForm
 
 def todoappView(request):
     q = request.GET.get('q') if request.GET.get('q') is not None else ''
-    todo_items = ToDoList.objects.filter(Q(category__name__icontains=q) |
-                                Q(title__icontains=q) |
-                                Q(content__icontains=q)
-                                )
+    todo_items = ToDoList.objects.filter(Q(category__name__contains=q)
     categories = Category.objects.all()
-    todo_count = todo_items.count()
-    return render(request, 'todo/todolist.html', {'all_items': todo_items, 'todo_count': todo_count, 'categories': categories})
+    return render(request, 'todo/todolist.html', {'all_items': todo_items, 'categories': categories})
 
 
 def addTodoView(request):
     form = TodoForm()
     categories = Category.objects.all()
     if request.method == 'POST':
-        category_name = request.POST.get('category')
-        category, created = Category.objects.get_or_create(name=category_name)
-        ToDoList.objects.create(
-            title=request.POST.get('title'),
-            content=request.POST.get('content'),
-            category=category,
-            due_date=request.POST.get('due_date'),
-        )
-        return redirect('todolist')
+        form = TodoForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('todolist')
     context = {'form': form, 'categories': categories}
+    return render(request, 'todo/todo_form.html', context)
+
+
+def updateTodo(request, pk):
+    update_todo = ToDoList.objects.get(id=pk)
+    form = TodoForm(instance=update_todo)
+    if request.method == 'POST':
+        form = TodoForm(request.POST, instance=update_todo)
+        if form.is_valid():
+            form.save()
+            return redirect('todolist')
+    context = {'form': form, }
     return render(request, 'todo/todo_form.html', context)
 
 

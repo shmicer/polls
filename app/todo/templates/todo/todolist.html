@@ -22,7 +22,7 @@
 {#                <input type="text" name="body">#}
 {#                <input type="submit" value="Add Todo Item">#}
 {#            </form>#}
-            <a href="{% url 'addItem' %}">Create ToDo</a>
+            <a href="{% url 'add-item' %}">Create ToDo</a>
         </div>
         <hr>
         <h5>
@@ -35,7 +35,9 @@
                     {{item.content}}
 
                     <p>Due date: {{ item.due_date }}</p>
-                    <a href="{% url 'deleteItem' item.id %}">Delete</a>
+                    <a href="{% url 'update-item' item.id %}">Edit</a>
+                    <a href="{% url 'delete-item' item.id %}">Delete</a>
+                    <br>
                     <small>{{ item.category }}</small>
                     <hr>
                 </li>

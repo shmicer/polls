@@ -3,7 +3,8 @@ from . import views
 
 urlpatterns = [
     path('', views.todoappView, name='todolist'),
-    path('addItem/', views.addTodoView, name='addItem'),
-    path('deleteItem/<int:pk>/', views.deleteTodo, name='deleteItem'),
+    path('add-item/', views.addTodoView, name='add-item'),
+    path('update-item/<int:pk>/', views.updateTodo, name='update-item'),
+    path('delete-item/<int:pk>/', views.deleteTodo, name='delete-item'),
 
     ]
