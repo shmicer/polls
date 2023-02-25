@@ -1,24 +1,47 @@
 {% extends 'todo/base.html' %}
 {% block content %}
 <h2>Register</h2>
+    <div class="row justify-content-center align-items-center h-100">
+    <div class="col col-sm-6 col-md-6 col-lg-4 col-xl-3">
+    <form method="POST" action="">
+        {% csrf_token %}
+      <div class="mb-3">
+        <label for="exampleInputUsername" class="form-label">Username</label>
+        <input type="text" name="username" class="form-control" id="exampleInputUsername">
+      </div>
+      <div class="mb-3">
+        <label for="exampleInputPassword" class="form-label">Password</label>
+        <input type="password" name="password" class="form-control">
+      </div>
+      <div class="mb-3">
+        <label for="exampleInputPassword2" class="form-label">Repeat password</label>
+        <input type="password" name="password2" class="form-control">
+      </div>
+        <div class="d-grid gap-2 col-6 mx-auto">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        <div class="d-grid gap-2 col-6 mx-auto">
+            <a href="{% url 'login' %}">Back to Login</a>
+        </div>
+        </div>
+    </form>
+    </div>
 
-<form method="post">
-  {% csrf_token %}
-  {% for field in form %}
-    <p>
-      {{ field.label_tag }}<br>
-      {{ field }}
-      {% if field.help_text %}
-        <small style="color: grey">{{ field.help_text }}</small>
-      {% endif %}
-      {% for error in field.errors %}
-        <p style="color: red">{{ error }}</p>
-      {% endfor %}
-    </p>
-  {% endfor %}
-  <button type="submit">Sign up</button>
-</form>
+    </div>
+{#<form method="post">#}
+{#  {% csrf_token %}#}
+{#  {% for field in form %}#}
+{#    <p>#}
+{#      {{ field.label_tag }}<br>#}
+{#      {{ field }}#}
+{#      {% if field.help_text %}#}
+{#        <small style="color: grey">{{ field.help_text }}</small>#}
+{#      {% endif %}#}
+{#      {% for error in field.errors %}#}
+{#        <p style="color: red">{{ error }}</p>#}
+{#      {% endfor %}#}
+{#    </p>#}
+{#  {% endfor %}#}
+{#  <button type="submit">Sign up</button>#}
+{#</form>#}
 
-<a href="{% url 'login' %}">Back to login</a>
-<a href="{% url 'home' %}">Back to Home</a>
 {% endblock %}

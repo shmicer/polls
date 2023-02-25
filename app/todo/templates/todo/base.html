@@ -3,10 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <title> ToDo List</title>
-  {% load static %}
-	<link rel="shortcut icon" type="image/png" href="{% static 'favicon.png' %}"/>
-{#   <link rel="stylesheet" type="text/css" href="{% static 'bulma.min.css' %}">#}
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  {% load bootstrap5 %}
+  {% bootstrap_css %}
+  {% bootstrap_javascript %}
 </head>
 <body>
 <div django-app="TaskManager">

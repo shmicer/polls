@@ -2,13 +2,37 @@
 
 {% block content %}
 
-<div>
-          <form class="form" action="" method="POST">
-              {% csrf_token %}
-              {{ form.as_p }}
-              <input type="Submit" value="Submit">
-          </form>
-
+ <div class="row justify-content-center align-items-center h-100">
+ <div class="col col-sm-6 col-md-6 col-lg-4 col-xl-3">
+    <form method="POST" action="">
+        {% csrf_token %}
+      <div class="mb-3">
+        <label for="exampleInputTitle" class="form-label">Title</label>
+        <input type="text" name="title" class="form-control" id="exampleInputTitle">
+      </div>
+      <div class="mb-3">
+        <label for="exampleInputCategory" class="form-label">Category</label>
+        <input type="text" name="category" class="form-control" id="exampleInputCategory">
+      </div>
+      <div class="mb-3">
+        <label for="exampleInputContent" class="form-label">Content</label>
+          <textarea required class="form-control" name="content"></textarea>
+      </div>
+      <div class="mb-3">
+        <label for="exampleInputDate" class="form-label">Due date</label>
+        <input type="text" name="due_date" class="form-control" id="exampleInputDate">
+      </div>
+        <div class="d-grid gap-2 col-6 mx-auto">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </form>
+{#          <form class="form" action="" method="POST">#}
+{#              {% csrf_token %}#}
+{#              {{ form.as_p }}#}
+{#              <input type="Submit" value="Submit">#}
+{#          </form>#}
+                  <a href="{% url 'view' %}">Back</a>
 </div>
+ </div>
 
 {% endblock %}

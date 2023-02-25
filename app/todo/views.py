@@ -17,14 +17,14 @@ def loginUser(request):
 
 def logoutUser(request):
     logout(request)
-    return redirect('home')
+    return redirect('login')
 
 
 def register(request):
     form = UserRegistrationForm(request.POST)
     if form.is_valid():
         user = form.save(commit=False)
-        user.username = user.username.lower()
+        user.set_password(form.cleaned_data['password'])
         user.save()
         login(request, user)
         return redirect('view')
@@ -45,12 +45,16 @@ def addTodoView(request):
     form = TodoForm()
     categories = Category.objects.all()
     if request.method == 'POST':
-        form = TodoForm(request.POST)
-        if form.is_valid():
-            todo = form.save(commit=False)
-            todo.host = request.user
-            form.save()
-            return redirect('view')
+        category_name = request.POST.get('category')
+        category, created = Category.objects.get_or_create(name=category_name)
+        ToDoList.objects.create(
+            host=request.user,
+            title=request.POST.get('title'),
+            category=category,
+            content=request.POST.get('content'),
+            due_date=request.POST.get('due_date')
+        )
+        return redirect('view')
     else:
         messages.error(request, 'An error occurred')
     context = {'form': form, 'categories': categories}
@@ -58,14 +62,20 @@ def addTodoView(request):
 
 
 def updateTodo(request, pk):
-    update_todo = ToDoList.objects.get(id=pk)
-    form = TodoForm(instance=update_todo)
+    todo = ToDoList.objects.get(id=pk)
+    form = TodoForm(instance=todo)
+    categories = Category.objects.all()
     if request.method == 'POST':
-        form = TodoForm(request.POST, instance=update_todo)
-        if form.is_valid():
-            form.save()
-            return redirect('view')
-    context = {'form': form, }
+        form = TodoForm(request.POST, instance=todo)
+        category_name = request.POST.get('category')
+        category, created = Category.objects.get_or_create(name=category_name)
+        todo.title = request.POST.get('title')
+        todo.content = request.POST.get('content')
+        todo.due_date = request.POST.get('due_date')
+        category.name = request.POST.get('category')
+        todo.save()
+        return redirect('view')
+    context = {'form': form, 'categories': categories}
     return render(request, 'todo/todo_form.html', context)
 
 

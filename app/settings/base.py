@@ -21,7 +21,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
+    'bootstrap5',
     'todo.apps.TodoConfig',
 ]
 
@@ -39,7 +39,7 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'urls'
 
 LOGIN_REDIRECT_URL = 'view'
-LOGOUT_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'login'
 
 
 TEMPLATES = [

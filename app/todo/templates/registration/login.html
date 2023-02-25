@@ -1,15 +1,35 @@
-{% extends 'todo/base.html' %}
+<html>
+<head>
+  <title>{% block title %}ToDo app{% endblock %}</title>
+  {% load bootstrap5 %}
+  {% bootstrap_css %}
+  {% bootstrap_javascript %}
+</head>
+<div class="container">
+  <ul class="nav bg-info">
 
+  </ul>
+<body>
 {% block content %}
-  <h2>Login</h2>
-  
-    <form method="post">
-      {% csrf_token %}
-      <table>
-        {{ form.as_p }}
-        <tr>
-          <td><input type="submit" value="Submit"></td>
-        </tr>
-      </table>
+
+ <div class="row justify-content-center align-items-center h-100">
+    <div class="col col-sm-6 col-md-6 col-lg-4 col-xl-3">
+    <form method="POST" action="">
+        {% csrf_token %}
+      <div class="mb-3">
+        <label for="exampleInputUsername" class="form-label">Username</label>
+        <input type="name" name="username" class="form-control" id="exampleInputUsername">
+      </div>
+      <div class="mb-3">
+        <label for="exampleInputPassword" class="form-label">Password</label>
+        <input type="password" name="password" class="form-control" id="exampleInputPassword">
+      </div>
+      <button type="submit" class="btn btn-primary float-right">Submit</button>
     </form>
+
+    <p>Haven't signed up yet?</p>
+    <a href="{% url 'register' %}">Sign Up</a>
+    </div>
+ </div>
+    </body>
 {% endblock %}
