@@ -11,11 +11,11 @@ def home(request):
     return render(request, 'todo/base.html')
 
 
-def loginUser(request):
+def login_user(request):
     return render(request, 'todo/login.html')
 
 
-def logoutUser(request):
+def logout_user(request):
     logout(request)
     return redirect('login')
 
@@ -33,7 +33,7 @@ def register(request):
     return render(request, 'todo/register.html', {'form': form})
 
 
-def todoappView(request):
+def todo_ap_view(request):
     q = request.GET.get('q') if request.GET.get('q') is not None else ''
     todo_items = ToDoList.objects.filter(Q(category__name__contains=q), host=request.user)
     finished_items = ToDoList.objects.filter(Q(category__name__contains=q), host=request.user, is_done=True)
@@ -42,7 +42,7 @@ def todoappView(request):
 
 
 @login_required(login_url='login')
-def addTodoView(request):
+def add_todo_view(request):
     form = TodoForm()
     categories = Category.objects.all()
     if request.method == 'POST':
@@ -62,7 +62,7 @@ def addTodoView(request):
     return render(request, 'todo/todo_form.html', context)
 
 
-def updateTodo(request, pk):
+def update_todo(request, pk):
     todo = ToDoList.objects.get(id=pk)
     form = TodoForm(instance=todo)
     categories = Category.objects.all()
@@ -80,13 +80,13 @@ def updateTodo(request, pk):
     return render(request, 'todo/todo_form.html', context)
 
 
-def deleteTodo(request, pk):
+def delete_todo(request, pk):
     delete_item = ToDoList.objects.get(id=pk)
     delete_item.delete()
     return redirect('view')
 
 
-def markAsDone(request, pk):
+def mark_as_done(request, pk):
     item = ToDoList.objects.get(id=pk)
     item.is_done = True
     item.save()
