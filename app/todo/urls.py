@@ -8,6 +8,7 @@ urlpatterns = [
     path("register/", views.register, name="register"),
     path('add-item/', views.addTodoView, name='add-item'),
     path('update-item/<int:pk>/', views.updateTodo, name='update-item'),
+    path('finish/<int:pk>/', views.markAsDone, name='finish'),
     path('delete-item/<int:pk>/', views.deleteTodo, name='delete-item'),
 
     ]

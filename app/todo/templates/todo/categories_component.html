@@ -2,15 +2,23 @@
           <div class="categories__header">
             <h2>Browse Categories</h2>
           </div>
-          <ul class="categories__list">
-            <li>
-              <a href="{% url 'view' %}" class="active">All <span> {{ categories.count }}</span></a>
-                <br>
+<nav id="sidebarMenu" class="col-md-6 col-lg-8 d-md-block bg-light mb-4">
+      <div class="position-sticky pt-3">
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{% url 'view' %}">
+                  All
+                </a>
             </li>
-              {% for category in categories %}
-            <li>
-              <a href="{% url 'view' %}?q={{ category.name }}">{{ category.name }} <span>{{ category.todoappView.count }}</span></a>
-            </li>
-              {% endfor %}
-          </ul>
-        </div>
+             {% for category in categories %}
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{% url 'view' %}?q={{ category.name }}">
+              {{ category.name }}
+            </a>
+          </li>
+            {% endfor %}
+
+        </ul>
+      </div>
+    </nav>
+</div>

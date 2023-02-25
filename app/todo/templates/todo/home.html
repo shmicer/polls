@@ -9,26 +9,24 @@
     }
 </style>
     {% if user.is_authenticated %}
-<h1>{{ user }}'s To Do List</h1>
-
 
 
 <div class="home-container">
     <div>
     {% include 'todo/categories_component.html' %}
     </div>
-
+    <div>
         <div>
-            <div>
-                <a class="btn btn-primary" href="{% url 'add-item' %}">Create ToDo</a>
-            </div>
+            <a class="btn btn-primary" href="{% url 'add-item' %}">Create ToDo</a>
+        </div>
         <div>
-        <hr>
+            <hr>
+            <h3>Actual Tasks</h3>
             <h5>
                 {{ all_items.count }} items to do
             </h5>
                 {% for item in all_items %}
-                    {% if request.user == item.host %}
+                    {% if request.user == item.host and not item.is_done %}
                     <div>
                     <a href="#" class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">
                         <img src="https://github.com/twbs.png" alt="twbs" width="32" height="32" class="rounded-circle flex-shrink-0">
@@ -36,23 +34,46 @@
                             <div>
                                 <h6 class="mb-0">{{ item.title }}</h6>
                                 <p class="mb-0 opacity-75">{{item.content}}</p>
+                                <small>Category: {{ item.category }}</small>
                             </div>
                             <small class="opacity-50 text-nowrap">Due date: {{ item.due_date }}</small>
                         </div>
                     </a>
                     </div>
+                        <br>
                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a class="btn btn-outline-success me-md-2" href="{% url 'finish' item.id %}">Mark as Done</a>
                         <a class="btn btn-outline-primary me-md-2" href="{% url 'update-item' item.id %}">Edit</a>
                         <a class="btn btn-outline-danger" href="{% url 'delete-item' item.id %}">Delete</a>
                     </div>
-                    <small>ToDo category: {{ item.category }}</small>
-                        <hr>
+                        <br>
                     {% endif %}
                 {% endfor %}
-
-
+        </div>
+    <hr>
+    <div>
+        <h3>Finished Tasks</h3>
+            <h5>
+                {{ all_items.count }} items done
+            </h5>
+        {% for item in all_items %}
+                    {% if request.user == item.host and item.is_done %}
+                    <div>
+                    <a href="#" class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">
+                        <img src="https://github.com/twbs.png" alt="twbs" width="32" height="32" class="rounded-circle flex-shrink-0">
+                        <div class="d-flex gap-2 w-100 justify-content-between">
+                            <div>
+                                <h6 class="mb-0">{{ item.title }}</h6>
+                                <p class="mb-0 opacity-75">{{item.content}}</p>
+                                <small>Category: {{ item.category }}</small>
+                            </div>
+                            <small class="opacity-50 text-nowrap">Due date: {{ item.due_date }}</small>
+                        </div>
+                    </a>
+                    </div>
+                    {% endif %}
+        {% endfor %}
     </div>
-{#        {% include 'base/feed_component.html' %}#}
     </div>
 </div>
     {% endif %}

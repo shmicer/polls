@@ -84,3 +84,9 @@ def deleteTodo(request, pk):
     delete_item.delete()
     return redirect('view')
 
+
+def markAsDone(request, pk):
+    item = ToDoList.objects.get(id=pk)
+    item.is_done = True
+    item.save()
+    return redirect('view')

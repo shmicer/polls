@@ -31,6 +31,7 @@ class ToDoList(models.Model):
     content = models.TextField(blank=True)
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
+    is_done = models.BooleanField(default=False)
     due_date = models.DateField(default=timezone.now().strftime("%Y-%m-%d"))
     category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True)
 
