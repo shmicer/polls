@@ -21,8 +21,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'polls_base',
-    'todo',
+
+    'todo.apps.TodoConfig',
 ]
 
 MIDDLEWARE = [
@@ -35,7 +35,12 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+
 ROOT_URLCONF = 'urls'
+
+LOGIN_REDIRECT_URL = 'view'
+LOGOUT_REDIRECT_URL = 'home'
+
 
 TEMPLATES = [
     {

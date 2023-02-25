@@ -4,11 +4,12 @@
           </div>
           <ul class="categories__list">
             <li>
-              <a href="{% url 'todolist' %}" class="active">All<span> {{ categories.count }}</span></a>
+              <a href="{% url 'view' %}" class="active">All <span> {{ categories.count }}</span></a>
+                <br>
             </li>
               {% for category in categories %}
             <li>
-              <a href="{% url 'todolist' %}?q={{ category.name }}">{{ category.name }} <span>{{ todo_count }}</span></a>
+              <a href="{% url 'view' %}?q={{ category.name }}">{{ category.name }} <span>{{ category.todoappView.count }}</span></a>
             </li>
               {% endfor %}
           </ul>

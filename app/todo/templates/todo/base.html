@@ -5,7 +5,7 @@
   <title> ToDo List</title>
   {% load static %}
 	<link rel="shortcut icon" type="image/png" href="{% static 'favicon.png' %}"/>
-   <link rel="stylesheet" type="text/css" href="{% static 'bulma.min.css' %}">
+{#   <link rel="stylesheet" type="text/css" href="{% static 'bulma.min.css' %}">#}
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
@@ -13,13 +13,19 @@
 	<nav class ="navbar is-success" role="navigation" aria-label="main navigation">
      	<div class="navbar-menu ">
         	<div class="navbar-start">
-        	<a class="navbar-item" href="../category">Categories</a>
-        	<a class="navbar-item" href="../todo">ToDo List</a>
-        	</div>
-         </div>
-	</nav>
+              {% if user.is_authenticated %}
+                  <span>Welcome {{ user }}</span>
+                  <a href="{% url 'logout' %}">Logout</a>
+
+              {% else %}
+                   <a href="{% url 'register' %}">Sign Up</a>
+                  <a href="{% url 'login' %}">Login</a>
+              {% endif %}
+            </div>
+        </div>
+    </nav>
+</div>
 {% block content %}
 {% endblock %}
-</div>
 </body>
 </html>
