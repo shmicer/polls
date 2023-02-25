@@ -54,12 +54,12 @@
     <div>
         <h3>Finished Tasks</h3>
             <h5>
-                {{ all_items.count }} items done
+                {{ finished_items.count }} items done
             </h5>
-        {% for item in all_items %}
-                    {% if request.user == item.host and item.is_done %}
+        {% for item in finished_items %}
+                    {% if request.user == item.host%}
                     <div>
-                    <a href="#" class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">
+                    <a href="#" class="list-group-item list-group-item-success list-group-item-action d-flex gap-3 py-3" aria-current="true">
                         <img src="https://github.com/twbs.png" alt="twbs" width="32" height="32" class="rounded-circle flex-shrink-0">
                         <div class="d-flex gap-2 w-100 justify-content-between">
                             <div>
@@ -70,6 +70,7 @@
                             <small class="opacity-50 text-nowrap">Due date: {{ item.due_date }}</small>
                         </div>
                     </a>
+                        <br>
                     </div>
                     {% endif %}
         {% endfor %}

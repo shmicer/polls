@@ -36,8 +36,9 @@ def register(request):
 def todoappView(request):
     q = request.GET.get('q') if request.GET.get('q') is not None else ''
     todo_items = ToDoList.objects.filter(Q(category__name__contains=q), host=request.user)
+    finished_items = ToDoList.objects.filter(Q(category__name__contains=q), host=request.user, is_done=True)
     categories = Category.objects.all()
-    return render(request, 'todo/home.html', {'all_items': todo_items, 'categories': categories})
+    return render(request, 'todo/home.html', {'all_items': todo_items, 'finished_items': finished_items, 'categories': categories})
 
 
 @login_required(login_url='login')
