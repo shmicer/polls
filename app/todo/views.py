@@ -35,10 +35,10 @@ def register(request):
 
 def todo_ap_view(request):
     q = request.GET.get('q') if request.GET.get('q') is not None else ''
-    todo_items = ToDoList.objects.filter(Q(category__name__contains=q), host=request.user)
+    todo_items = ToDoList.objects.filter(Q(category__name__contains=q), host=request.user, is_done=False)
     finished_items = ToDoList.objects.filter(Q(category__name__contains=q), host=request.user, is_done=True)
     categories = Category.objects.all()
-    return render(request, 'todo/home.html', {'all_items': todo_items, 'finished_items': finished_items, 'categories': categories})
+    return render(request, 'todo/home.html', {'actual_items': todo_items, 'finished_items': finished_items, 'categories': categories})
 
 
 @login_required(login_url='login')
@@ -64,10 +64,8 @@ def add_todo_view(request):
 
 def update_todo(request, pk):
     todo = ToDoList.objects.get(id=pk)
-    form = TodoForm(instance=todo)
     categories = Category.objects.all()
     if request.method == 'POST':
-        form = TodoForm(request.POST, instance=todo)
         category_name = request.POST.get('category')
         category, created = Category.objects.get_or_create(name=category_name)
         todo.title = request.POST.get('title')
@@ -76,7 +74,7 @@ def update_todo(request, pk):
         category.name = request.POST.get('category')
         todo.save()
         return redirect('view')
-    context = {'form': form, 'categories': categories}
+    context = {'categories': categories, 'todo': todo}
     return render(request, 'todo/todo_form.html', context)
 
 
