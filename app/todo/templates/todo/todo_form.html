@@ -8,11 +8,12 @@
         {% csrf_token %}
       <div class="mb-3">
         <label for="exampleInputTitle" class="form-label">Title</label>
-        <input type="text" name="title" class="form-control" id="exampleInputTitle" value="{{ todo.title }}">
+        <input type="text" name="title" required class="form-control" id="exampleInputTitle" value="{{ todo.title }}">
+          <div class="form-error">{{ todo.title.errors }}</div>
       </div>
       <div class="mb-3">
         <label for="category" class="form-label">Category</label>
-        <input type="text" name="category" value="{{ todo.category.name }}" class="form-control" id="category" list="category-list">
+        <input type="text" name="category" value="{{ todo.category.name }}" required class="form-control" id="category" list="category-list">
         <datalist id="category-list">
           {% for category in categories %}
             <select class="form-select" aria-label="Default select example" id="category">
@@ -20,6 +21,7 @@
           {% endfor %}
           </select>
         </datalist>
+      <div class="form-error">{{ todo.category.errors }}</div>
       </div>
       <div class="mb-3">
         <label for="exampleInputContent" class="form-label">Content</label>
@@ -27,7 +29,7 @@
       </div>
       <div class="mb-3">
         <label for="exampleInputDate" class="form-label">Due date</label>
-        <input type="date" name="due_date" class="form-control" value="{{ todo.due_date }}">
+        <input type="date" name="due_date" required class="form-control" value="{{ todo.due_date }}">
       </div>
         <div class="d-grid gap-2 col-6 mx-auto">
             <button type="submit" class="btn btn-primary">Submit</button>

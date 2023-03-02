@@ -12,7 +12,7 @@
             </li>
              {% for category in categories %}
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="{% url 'view' %}?q={{ category.name }}">
+            <a class="nav-link active" aria-current="page" href="{{ category.get_absolute_url }}">
               {{ category.name }}
             </a>
           </li>

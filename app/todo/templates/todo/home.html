@@ -57,7 +57,7 @@
                 {{ finished_items.count }} items done
             </h5>
         {% for item in finished_items %}
-                    {% if request.user == item.host%}
+                    {% if request.user == item.host %}
                     <div>
                     <a href="#" class="list-group-item list-group-item-success list-group-item-action d-flex gap-3 py-3" aria-current="true">
                         <img src="https://github.com/twbs.png" alt="twbs" width="32" height="32" class="rounded-circle flex-shrink-0">

@@ -1,17 +1,21 @@
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title> ToDo List</title>
+  <title>{{title}}</title>
   {% load bootstrap5 %}
   {% bootstrap_css %}
   {% bootstrap_javascript %}
-<header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
+<header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 ms-3 border-bottom">
+      <a href="{% url 'view' %}" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
+        TODO List
+      </a>
 
-      <div class="col-md-3 text-center">
+      <div class="col-md-3">
               {% if user.is_authenticated %}
-                  <span>Welcome, {{ user }}</span>
-                  <a class="btn btn-primary" href="{% url 'logout' %}">Logout</a>
+                  <span>Welcome, {{ user }} </span>
+                  <a class="btn btn-primary me-md-2" href="{% url 'logout' %}">Logout</a>
 
               {% else %}
                 <a class="btn btn-outline-primary me-2" href="{% url 'register' %}">Sign Up</a>
@@ -20,7 +24,6 @@
       </div>
     </header>
 </head>
-<body>
 {% block content %}
 {% endblock %}
 </body>

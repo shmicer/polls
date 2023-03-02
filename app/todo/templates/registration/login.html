@@ -4,32 +4,43 @@
   {% load bootstrap5 %}
   {% bootstrap_css %}
   {% bootstrap_javascript %}
-</head>
-<div class="container">
-  <ul class="nav bg-info">
-
-  </ul>
+{#<style>#}
+{#    h2{#}
+{#        align-items: center;#}
+{#        display: flex;#}
+{#        flex-direction: column;#}
+{#    }#}
+{#</style>#}
+{#</head>#}
+{#    <h2>Login</h2>#}
 <body>
-{% block content %}
-
+<div class="container">
  <div class="row justify-content-center align-items-center h-100">
     <div class="col col-sm-6 col-md-6 col-lg-4 col-xl-3">
     <form method="POST" action="">
         {% csrf_token %}
       <div class="mb-3">
         <label for="exampleInputUsername" class="form-label">Username</label>
-        <input type="name" name="username" class="form-control" id="exampleInputUsername">
+        <input type="text" name="username" class="form-control" id="exampleInputUsername">
+          <div class="form-error">{{ form.username.errors }}</div>
       </div>
       <div class="mb-3">
         <label for="exampleInputPassword" class="form-label">Password</label>
         <input type="password" name="password" class="form-control" id="exampleInputPassword">
+          <div class="form-error">{{ form.password.errors }}</div>
       </div>
+        <div class="d-grid gap-2 col-6 mx-auto">
       <button type="submit" class="btn btn-primary float-right">Submit</button>
+        </div>
     </form>
-
-    <p>Haven't signed up yet?</p>
-    <a href="{% url 'register' %}">Sign Up</a>
+    <div class="d-grid gap-2 col-6 mx-auto">
+        <small>Haven't signed up yet?</small>
+    <div class="d-grid gap-2 col-6 mx-auto">
+        <a href="{% url 'register' %}">Sign Up</a>
+    </div>
+    </div>
     </div>
  </div>
-    </body>
-{% endblock %}
+</div>
+</body>
+</html>
