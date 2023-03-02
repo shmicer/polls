@@ -50,7 +50,7 @@ class CategoryView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'ToDo Category - ' + str(context['actual_items'][0].category)
+        context['title'] = f"ToDo Category - {str(context['actual_items'][0].category)}"
         return context
 
     def get_queryset(self):
