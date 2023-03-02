@@ -22,7 +22,7 @@ class RegisterUser(CreateView):
 
 class LoginUser(LoginView):
     form_class = LoginUserForm
-    template_name = 'women/login.html'
+    template_name = 'todo/login.html'
 
 
 def logout_user(request):
@@ -57,64 +57,51 @@ class CategoryView(ListView):
         return ToDoList.objects.filter(category__slug=self.kwargs['cat_slug'])
 
 
-class AddToDoItem(CreateView):
-    form_class = TodoForm
-    template_name = 'todo/todo_form.html'
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'Add ToDo Item'
-        return context
-
-
-
-# @login_required(login_url='login')
-# def add_todo_view(request):
-#     categories = Category.objects.all()
-#     if request.method == 'POST':
-#         category_name = request.POST.get('category')
-#         category, created = Category.objects.get_or_create(name=category_name, slug=category_name)
-#         ToDoList.objects.create(
-#             host=request.user,
-#             title=request.POST.get('title'),
-#             category=category,
-#             content=request.POST.get('content'),
-#             due_date=request.POST.get('due_date')
-#         )
-#         return redirect('view')
-#     else:
-#         form = TodoForm()
-#     context = {'form': form, 'categories': categories}
-#     return render(request, 'todo/todo_form.html', context)
+def add_todo_view(request):
+    categories = Category.objects.all()
+    if request.method == 'POST':
+        form = TodoForm()
+        category_name = request.POST.get('category')
+        category, created = Category.objects.get_or_create(name=category_name, slug=category_name)
+        ToDoList.objects.create(
+            host=request.user,
+            title=request.POST.get('title'),
+            category=category,
+            content=request.POST.get('content'),
+            due_date=request.POST.get('due_date')
+        )
+        return redirect('view')
+    else:
+        form = TodoForm()
+    context = {'form': form, 'categories': categories}
+    return render(request, 'todo/todo_form.html', context)
 
 
-@login_required(login_url='login')
 def update_todo(request, pk):
     todo = ToDoList.objects.get(id=pk)
     categories = Category.objects.all()
     if request.method == 'POST':
         category_name = request.POST.get('category')
         category, created = Category.objects.get_or_create(name=category_name)
-        todo.title = request.POST.get('title')
-        todo.content = request.POST.get('content')
-        todo.due_date = request.POST.get('due_date')
-        category.name = request.POST.get('category')
-        todo.save()
+        ToDoList.objects.update(
+            title=request.POST.get('title'),
+            category=category,
+            content=request.POST.get('content'),
+            due_date=request.POST.get('due_date')
+        )
         return redirect('view')
     context = {'categories': categories, 'todo': todo}
     return render(request, 'todo/todo_form.html', context)
 
 
-@login_required(login_url='login')
-def delete_todo(request, pk):
-    delete_item = ToDoList.objects.get(id=pk)
-    delete_item.delete()
-    return redirect('view')
-
-
-@login_required(login_url='login')
 def mark_as_done(request, pk):
     item = ToDoList.objects.get(id=pk)
     item.is_done = True
     item.save()
+    return redirect('view')
+
+
+def delete_todo(request, pk):
+    delete_item = ToDoList.objects.get(id=pk)
+    delete_item.delete()
     return redirect('view')

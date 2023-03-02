@@ -9,7 +9,6 @@
       <div class="mb-3">
         <label for="exampleInputTitle" class="form-label">Title</label>
         <input type="text" name="title" required class="form-control" id="exampleInputTitle" value="{{ todo.title }}">
-          <div class="form-error">{{ todo.title.errors }}</div>
       </div>
       <div class="mb-3">
         <label for="category" class="form-label">Category</label>
@@ -21,7 +20,6 @@
           {% endfor %}
           </select>
         </datalist>
-      <div class="form-error">{{ todo.category.errors }}</div>
       </div>
       <div class="mb-3">
         <label for="exampleInputContent" class="form-label">Content</label>
