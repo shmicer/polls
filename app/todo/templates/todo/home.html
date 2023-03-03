@@ -23,9 +23,9 @@
             <hr>
             <h3>Actual Tasks</h3>
             <h5>
-                {{ actual_items.count }} items to do
+                {{ cat_actual_items.count }} items to do
             </h5>
-                {% for item in actual_items %}
+                {% for item in items %}
                     {% if request.user == item.host and not item.is_done %}
                     <div>
                     <a href="#" class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">
@@ -54,9 +54,9 @@
     <div>
         <h3>Finished Tasks</h3>
             <h5>
-                {{ finished_items.count }} items done
+                {{ cat_finished_items.count }} items done
             </h5>
-        {% for item in finished_items %}
+        {% for item in cat_finished_items %}
                     {% if request.user == item.host %}
                     <div>
                     <a href="#" class="list-group-item list-group-item-success list-group-item-action d-flex gap-3 py-3" aria-current="true">

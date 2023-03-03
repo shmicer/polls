@@ -12,7 +12,7 @@
       </div>
       <div class="mb-3">
         <label for="category" class="form-label">Category</label>
-        <input type="text" name="category" value="{{ todo.category.name }}" required class="form-control" id="category" list="category-list">
+        <input type="text" name="category" value="{{ todo.category.name }}" class="form-control" id="category" list="category-list">
         <datalist id="category-list">
           {% for category in categories %}
             <select class="form-select" aria-label="Default select example" id="category">

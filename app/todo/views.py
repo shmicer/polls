@@ -1,11 +1,10 @@
 from django.contrib.auth.views import LoginView
 from django.shortcuts import render, redirect
-from django.urls import reverse_lazy
 
 from .models import ToDoList, Category
 from django.contrib.auth import logout, login
-from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView, CreateView
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .forms import TodoForm, RegisterUserForm, LoginUserForm
 
@@ -30,37 +29,43 @@ def logout_user(request):
     return redirect('login')
 
 
-class TodoAppView(ListView):
+class TodoAppView(LoginRequiredMixin, ListView):
     model = ToDoList
-    context_object_name = 'actual_items'
+    context_object_name = 'items'
     template_name = 'todo/home.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['finished_items'] = ToDoList.objects.filter(is_done=True)
+        context['cat_actual_items'] = ToDoList.objects.filter(host=self.request.user, is_done=False)
+        context['cat_finished_items'] = ToDoList.objects.filter(host=self.request.user, is_done=True)
         context['title'] = 'ToDo List'
         context['categories'] = Category.objects.all()
         return context
 
 
-class CategoryView(ListView):
+class CategoryView(LoginRequiredMixin, ListView):
     model = ToDoList
-    context_object_name = 'actual_items'
+    context_object_name = 'items'
     template_name = 'todo/home.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = f"ToDo Category - {str(context['actual_items'][0].category)}"
+        context['categories'] = Category.objects.all()
+        context['cat_actual_items'] = ToDoList.objects.filter(host=self.request.user, is_done=False, category__slug=self.kwargs['cat_slug'])
+        context['cat_finished_items'] = ToDoList.objects.filter(host=self.request.user, is_done=True, category__slug=self.kwargs['cat_slug'])
+        context['title'] = f'ToDo Category {str(self.kwargs["cat_slug"])}'
         return context
 
     def get_queryset(self):
-        return ToDoList.objects.filter(category__slug=self.kwargs['cat_slug'])
+        cat_items = ToDoList.objects.filter(category__slug=self.kwargs['cat_slug'])
+        return cat_items
 
 
 def add_todo_view(request):
     categories = Category.objects.all()
+    title = 'Create ToDo'
+    form = TodoForm()
     if request.method == 'POST':
-        form = TodoForm()
         category_name = request.POST.get('category')
         category, created = Category.objects.get_or_create(name=category_name, slug=category_name)
         ToDoList.objects.create(
@@ -73,24 +78,27 @@ def add_todo_view(request):
         return redirect('view')
     else:
         form = TodoForm()
-    context = {'form': form, 'categories': categories}
+    context = {'form': form, 'categories': categories, 'title': title}
     return render(request, 'todo/todo_form.html', context)
 
 
 def update_todo(request, pk):
     todo = ToDoList.objects.get(id=pk)
+    title = 'Update ToDo'
     categories = Category.objects.all()
+    form = TodoForm(instance=todo)
     if request.method == 'POST':
         category_name = request.POST.get('category')
         category, created = Category.objects.get_or_create(name=category_name)
-        ToDoList.objects.update(
-            title=request.POST.get('title'),
-            category=category,
-            content=request.POST.get('content'),
-            due_date=request.POST.get('due_date')
-        )
+        todo.title = request.POST.get('title')
+        todo.category = category
+        todo.content = request.POST.get('content')
+        todo.due_date = request.POST.get('due_date')
+        todo.save()
         return redirect('view')
-    context = {'categories': categories, 'todo': todo}
+    else:
+        form = TodoForm()
+    context = {'categories': categories, 'todo': todo, 'form': form, 'title': title}
     return render(request, 'todo/todo_form.html', context)
 
 

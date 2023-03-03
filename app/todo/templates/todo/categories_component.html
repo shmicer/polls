@@ -2,22 +2,24 @@
           <div class="categories__header">
             <h2>Browse Categories</h2>
           </div>
-<nav id="sidebarMenu" class="col-md-6 col-lg-8 d-md-block bg-light mb-4">
+<nav id="sidebarMenu" class="col-lg-10 mb-4">
       <div class="position-sticky pt-3">
-        <ul class="nav flex-column">
-            <li class="nav-item">
+        <ul class="list-group">
+            <li class="list-group-item d-flex justify-content-between align-items-center">
                 <a class="nav-link active" aria-current="page" href="{% url 'view' %}">
                   All
                 </a>
+                <span class="badge bg-primary rounded-pill">{{ cat_actual_items.count }} items</span>
             </li>
-             {% for category in categories %}
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="{{ category.get_absolute_url }}">
-              {{ category.name }}
-            </a>
-          </li>
-            {% endfor %}
 
+             {% for category in categories %}
+                 <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <a class="nav-link active" aria-current="page" href="{{ category.get_absolute_url }}">
+                    {{ category.name }}
+                    </a>
+                    <span class="badge bg-primary rounded-pill">{{ cat_actual_items.count }}</span>
+                </li>
+            {% endfor %}
         </ul>
       </div>
     </nav>
