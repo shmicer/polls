@@ -1,0 +1,27 @@
+
+<html>
+<head>
+  <title>{% block title %}Delete Item{% endblock %}</title>
+  {% load bootstrap5 %}
+  {% bootstrap_css %}
+  {% bootstrap_javascript %}
+<body>
+<div class="container">
+     <div class="row justify-content-center align-items-center h-100">
+        <div class="col-6 mx-auto">
+            <form action="" method="post">{% csrf_token %}
+                <div class="col-6 mx-auto">
+                    <p>Are you sure you want to delete "{{ object }}"?</p>
+                    <div class="col-4 mx-auto">
+                    <button type="submit" class="btn btn-primary">Confirm</button>
+                </div>
+                    </div>
+            </form>
+            <div class="col-1 mx-auto">
+                <a href="{% url 'view' %}">Back</a>
+            </div>
+        </div>
+     </div>
+</div>
+</body>
+</html>

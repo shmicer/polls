@@ -26,7 +26,7 @@ class ToDoList(models.Model):
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
     is_done = models.BooleanField(default=False)
-    due_date = models.DateField(default=timezone.now().strftime('%Y-%m-%d'))
+    due_date = models.DateField(default=timezone.now().strftime('%d-%m-%Y'))
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
 
     class Meta:
@@ -35,3 +35,5 @@ class ToDoList(models.Model):
     def __str__(self):
         return self.title
 
+    def get_absolute_url(self):
+        return reverse('', kwargs={'pk': self.pk})
