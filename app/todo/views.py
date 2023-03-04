@@ -1,7 +1,7 @@
-from .forms import TodoForm, RegisterUserForm, LoginUserForm
-from .models import ToDoList, Category
+from .forms import RegisterUserForm, LoginUserForm
+from .utils import *
 
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse_lazy
 
 from django.contrib.auth import logout, login
@@ -22,49 +22,30 @@ class RegisterUser(CreateView):
 
 class LoginUser(LoginView):
     form_class = LoginUserForm
+    context_object_name = 'items'
     template_name = 'todo/login.html'
 
 
-class TodoAppView(LoginRequiredMixin, ListView):
+class TodoAppView(LoginRequiredMixin, DataMixin, ListView):
     model = ToDoList
     context_object_name = 'items'
     template_name = 'todo/home.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['cat_actual_items'] = ToDoList.objects.filter(host=self.request.user, is_done=False)
-        context['cat_finished_items'] = ToDoList.objects.filter(host=self.request.user, is_done=True)
-        context['title'] = 'ToDo List'
-        context['categories'] = Category.objects.all()
-        return context
-
-
-class CategoryView(LoginRequiredMixin, ListView):
-    model = ToDoList
-    context_object_name = 'items'
-    template_name = 'todo/home.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['categories'] = Category.objects.all()
-        context['cat_actual_items'] = ToDoList.objects.filter(
-            host=self.request.user,
-            is_done=False,
-            category__slug=self.kwargs['cat_slug']
-        )
-        context['cat_finished_items'] = ToDoList.objects.filter(
-            host=self.request.user,
-            is_done=True,
-            category__slug=self.kwargs['cat_slug']
-        )
-        context['title'] = f'ToDo Category {str(self.kwargs["cat_slug"])}'
+        c_def = self.get_user_context(title='ToDo List')
+        context = dict(list(context.items()) + list(c_def.items()))
         return context
 
     def get_queryset(self):
-        return ToDoList.objects.filter(category__slug=self.kwargs['cat_slug'])
+        self.category = None
+        if 'cat_slug' in self.kwargs:
+            self.category = get_object_or_404(Category, slug=self.kwargs['cat_slug'])
+            return ToDoList.objects.filter(category=self.category, host=self.request.user).select_related('category')
+        return ToDoList.objects.filter(host=self.request.user).select_related('category')
 
 
-class CreateToDoView(CreateView):
+class CreateToDoView(LoginRequiredMixin, DataMixin, CreateView):
     model = ToDoList
     context_object_name = 'todo'
     fields = ['title', 'content', 'due_date']
@@ -72,8 +53,8 @@ class CreateToDoView(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Add Item'
-        context['categories'] = Category.objects.all()
+        c_def = self.get_user_context(title='Add Item')
+        context = dict(list(context.items()) + list(c_def.items()))
         return context
 
     def form_valid(self, form):
@@ -83,7 +64,7 @@ class CreateToDoView(CreateView):
         return super().form_valid(form)
 
 
-class UpdateToDoView(UpdateView):
+class UpdateToDoView(LoginRequiredMixin, DataMixin, UpdateView):
     model = ToDoList
     context_object_name = 'todo'
     fields = ['title', 'content', 'due_date']
@@ -91,8 +72,8 @@ class UpdateToDoView(UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Update Item'
-        context['categories'] = Category.objects.all()
+        c_def = self.get_user_context(title='Edit Item')
+        context = dict(list(context.items()) + list(c_def.items()))
         return context
 
     def form_valid(self, form):

@@ -8,7 +8,7 @@
         grid-template-columns: 1fr 2fr 0.5fr;
     }
 </style>
-    {% if user.is_authenticated %}
+ {% if user.is_authenticated %}
 
 
 <div class="home-container">
@@ -23,24 +23,23 @@
             <hr>
             <h3>Actual Tasks</h3>
             <h5>
-                {{ cat_actual_items.count }} items to do
+                {{ items|length }} items to do
             </h5>
                 {% for item in items %}
-                    {% if request.user == item.host and not item.is_done %}
+                    {% if not item.is_done %}
                     <div>
-                    <a href="#" class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">
-                        <img src="https://github.com/twbs.png" alt="twbs" width="32" height="32" class="rounded-circle flex-shrink-0">
-                        <div class="d-flex gap-2 w-100 justify-content-between">
-                            <div>
-                                <h6 class="mb-0">{{ item.title }}</h6>
-                                <p class="mb-0 opacity-75">{{item.content}}</p>
-                                <small>Category: {{ item.category }}</small>
+                        <a href="#" class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">
+                            <img src="https://github.com/twbs.png" alt="twbs" width="32" height="32" class="rounded-circle flex-shrink-0">
+                            <div class="d-flex gap-2 w-100 justify-content-between">
+                                <div>
+                                    <h6 class="mb-0">{{ item.title }}</h6>
+                                    <p class="mb-0 opacity-75">{{item.content}}</p>
+                                    <small>Category: {{ item.category }}</small>
+                                </div>
+                                <small class="opacity-50 text-nowrap">Due date: {{ item.due_date }}</small>
                             </div>
-                            <small class="opacity-50 text-nowrap">Due date: {{ item.due_date }}</small>
-                        </div>
-                    </a>
+                        </a>
                     </div>
-                        <br>
                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                         <a class="btn btn-outline-success me-md-2" href="{% url 'finish' item.id %}">Mark as Done</a>
                         <a class="btn btn-outline-primary me-md-2" href="{% url 'update-item' item.id %}">Edit</a>
@@ -49,34 +48,35 @@
                         <br>
                     {% endif %}
                 {% endfor %}
+
         </div>
-    <hr>
+        <hr>
     <div>
         <h3>Finished Tasks</h3>
             <h5>
-                {{ cat_finished_items.count }} items done
+                {{ items|length }} items done
             </h5>
-        {% for item in cat_finished_items %}
-                    {% if request.user == item.host %}
+        {% for item in items %}
+            {% if item.is_done %}
                     <div>
-                    <a href="#" class="list-group-item list-group-item-success list-group-item-action d-flex gap-3 py-3" aria-current="true">
-                        <img src="https://github.com/twbs.png" alt="twbs" width="32" height="32" class="rounded-circle flex-shrink-0">
-                        <div class="d-flex gap-2 w-100 justify-content-between">
-                            <div>
-                                <h6 class="mb-0">{{ item.title }}</h6>
-                                <p class="mb-0 opacity-75">{{item.content}}</p>
-                                <small>Category: {{ item.category }}</small>
+                        <a href="#" class="list-group-item list-group-item-success list-group-item-action d-flex gap-3 py-3" aria-current="true">
+                            <img src="https://github.com/twbs.png" alt="twbs" width="32" height="32" class="rounded-circle flex-shrink-0">
+                            <div class="d-flex gap-2 w-100 justify-content-between">
+                                <div>
+                                    <h6 class="mb-0">{{ item.title }}</h6>
+                                    <p class="mb-0 opacity-75">{{item.content}}</p>
+                                    <small>Category: {{ item.category }}</small>
+                                </div>
+                                <small class="opacity-50 text-nowrap">Due date: {{ item.due_date }}</small>
                             </div>
-                            <small class="opacity-50 text-nowrap">Due date: {{ item.due_date }}</small>
-                        </div>
-                    </a>
+                        </a>
                         <br>
                     </div>
-                    {% endif %}
+            {% endif %}
         {% endfor %}
     </div>
     </div>
 </div>
-    {% endif %}
+ {% endif %}
 {% endblock content %}
 
