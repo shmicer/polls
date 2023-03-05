@@ -23,7 +23,7 @@
             <hr>
             <h3>Actual Tasks</h3>
             <h5>
-                {{ items|length }} items to do
+                {{ actual }} items to do
             </h5>
                 {% for item in items %}
                     {% if not item.is_done %}
@@ -54,7 +54,7 @@
     <div>
         <h3>Finished Tasks</h3>
             <h5>
-                {{ items|length }} items done
+                {{ finished }} items done
             </h5>
         {% for item in items %}
             {% if item.is_done %}

@@ -26,23 +26,22 @@ class LoginUser(LoginView):
     template_name = 'todo/login.html'
 
 
-class TodoAppView(LoginRequiredMixin, DataMixin, ListView):
+class TodoAppView(LoginRequiredMixin, ListView):
     model = ToDoList
     context_object_name = 'items'
     template_name = 'todo/home.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        c_def = self.get_user_context(title='ToDo List')
-        context = dict(list(context.items()) + list(c_def.items()))
-        return context
-
-    def get_queryset(self):
-        self.category = None
+        context['categories'] = Category.objects.all()
+        context['title'] = 'ToDo List'
+        context['items'] = context['items'].filter(host=self.request.user).select_related('category')
         if 'cat_slug' in self.kwargs:
             self.category = get_object_or_404(Category, slug=self.kwargs['cat_slug'])
-            return ToDoList.objects.filter(category=self.category, host=self.request.user).select_related('category')
-        return ToDoList.objects.filter(host=self.request.user).select_related('category')
+            context['items'] = context['items'].filter(category=self.category)
+        context['actual'] = len(context['items'].filter(is_done=False))
+        context['finished'] = len(context['items']) - context['actual']
+        return context
 
 
 class CreateToDoView(LoginRequiredMixin, DataMixin, CreateView):
